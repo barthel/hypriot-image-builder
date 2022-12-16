@@ -1,4 +1,17 @@
-version: 2
+version: 2.1
+
+workflows:
+  version: 2.1
+  build_and_deploy:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
+          context:
+            - "github"
+            - "Docker Hub"
+
 jobs:
   build:
     machine: true
@@ -6,14 +19,15 @@ jobs:
       - checkout
       - run:
           name: Build
-          command: docker build -t hypriot/image-builder .
+          command: docker build -t ${DOCKER_USER}/hypriot-image-builder .
       - run:
           name: Test
-          command: docker run hypriot/image-builder uname -a
+          command: docker run ${DOCKER_USER}/hypriot-image-builder uname -a
       - deploy:
           name: Deploy
           command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              docker login -u $DOCKER_USER -p $DOCKER_PASS
-              docker push hypriot/image-builder
+            echo "${DOCKER_PASS}" | docker login -u "${DOCKER_USER}" --password-stdin
+            if [ "${CIRCLE_TAG}" != "" ]; then
+              docker image tag ${DOCKER_USER}/hypriot-image-builder ${DOCKER_USER}/hypriot-image-builder:${CIRCLE_TAG}
             fi
+            docker push --all-tags ${DOCKER_USER}/hypriot-image-builder
