@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM debian:buster
 
 RUN  \
     sed -i 's,http://httpredir.debian.org/debian,http://ftp.us.debian.org/debian/,' /etc/apt/sources.list && \
