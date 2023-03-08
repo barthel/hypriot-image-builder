@@ -23,7 +23,10 @@ RUN  \
     sed -i 's,http://ftp.us.debian.org/debian/,http://httpredir.debian.org/debian,' /etc/apt/sources.list && \
     rm -rf /var/lib/apt/lists/*
 
-RUN gem update --system && \
+# https://techglimpse.com/rubygems-update-requires-ruby-version-2-3-0-fix/
+RUN \
+    gem install "rubygems-update:<3.4.0" --no-document && \
+    gem update --system && \
     gem install --no-document serverspec && \
     gem install --no-document pry-byebug && \
     gem install --no-document bundler
