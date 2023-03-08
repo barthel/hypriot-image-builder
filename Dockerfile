@@ -19,9 +19,7 @@ RUN  \
     ruby \
     ruby-dev \
     shellcheck \
-    --no-install-recommends && \
-    sed -i 's,http://ftp.us.debian.org/debian/,http://httpredir.debian.org/debian,' /etc/apt/sources.list && \
-    rm -rf /var/lib/apt/lists/*
+    --no-install-recommends
 
 # https://techglimpse.com/rubygems-update-requires-ruby-version-2-3-0-fix/
 RUN \
@@ -44,5 +42,6 @@ RUN \
     libseccomp2 \
     -t buster-backports \
     --no-install-recommends && \
-    rm -f /etc/apt/sources.list.d/debian-backports.list && \
+    rm -f /etc/apt/sources.list.d/debian-backports.list  && \
+    sed -i 's,http://ftp.us.debian.org/debian/,http://httpredir.debian.org/debian,' /etc/apt/sources.list && \
     rm -rf /var/lib/apt/lists/*
