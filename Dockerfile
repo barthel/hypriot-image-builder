@@ -13,6 +13,10 @@ RUN \
     apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
     libseccomp2 \
+    ruby \
+    ruby-dev \
+    rubygems \
+    rubygems-integration \
     -t buster-backports \
     --no-install-recommends
 
@@ -31,8 +35,6 @@ RUN \
     unzip \
     pigz \
     awscli \
-    ruby \
-    ruby-dev \
     shellcheck \
     --no-install-recommends
 
