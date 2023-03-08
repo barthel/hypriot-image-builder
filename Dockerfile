@@ -7,20 +7,21 @@ RUN  \
 # https://blog.samcater.com/fix-workaround-rpi4-docker-libseccomp2-docker-20/
 # Install libseccomp2 from buster backports
 RUN \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y gnupg --no-install-recommends && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y gnupg --no-install-recommends
+
+RUN \
     apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 04EE7237B7D453EC 648ACFD622F3D138 && \
-    echo 'deb http://httpredir.debian.org/debian buster-backports main contrib non-free' >> /etc/apt/sources.list.d/debian-backports.list && \
+    echo 'deb http://ftp.us.debian.org/debian buster-backports main contrib non-free' >> /etc/apt/sources.list.d/debian-backports.list && \
     apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
     libseccomp2 \
-    ruby \
-    ruby-dev \
-    rubygems \
-    rubygems-integration \
     -t buster-backports \
-    --no-install-recommends
+    --no-install-recommends && \
+    rm -f /etc/apt/sources.list.d/debian-backports.list && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN \
+    apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
     python-pip \
     build-essential \
@@ -35,6 +36,8 @@ RUN \
     unzip \
     pigz \
     awscli \
+    ruby \
+    ruby-dev \
     shellcheck \
     --no-install-recommends
 
